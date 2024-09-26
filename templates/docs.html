@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPLIKERS - Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .show-menu {
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        body.light {
+            background-color: white;
+            color: black;
+        }
+
+        body.dark {
+            background-color: #1a202c;
+            color: white;
+        }
+
+        .light .bg-theme {
+            background-color: white;
+        }
+
+        .dark .bg-theme {
+            background-color: #2d3748;
+        }
+
+        .light .text-theme {
+            color: black;
+        }
+
+        .dark .text-theme {
+            color: white;
+        }
+
+        /* Alert Styles */
+        .alert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            z-index: 50;
+            width: 300px;
+            text-align: center;
+        }
+
+        .alert.success {
+            background-color: #c6f6d5;
+            color: #2f855a;
+        }
+
+        .alert.error {
+            background-color: #fed7d7;
+            color: #c53030;
+        }
+
+        .alert-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="light bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg hidden-menu pt-24 bg-theme">
+        <nav class="p-4">
+            <ul class="space-y-4 text-theme">
+                <li><a href="/" class="hover:text-blue-500">Home</a></li>
+                <li><a href="docs" class="hover:text-blue-500">Documentation</a></li>
+                <li><a href="send_reaction" class="hover:text-blue-500">Send Reaction</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-md fixed top-0 w-full p-4 flex justify-between items-center z-40 bg-theme text-theme">
+        <div class="flex space-x-4 items-center">
+            <img src="https://i.ibb.co/sgktxyD/1727345856135.png" alt="RPLIKERS Icon" class="w-10 h-10 rounded-full">
+            <h1 class="text-3xl font-bold">RPLIKERS</h1>
+        </div>
+
+        <button id="menuButton" class="hover:text-blue-500 focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </button>
+    </header>
+
+    <div class="container mx-auto mt-20 p-8 bg-white rounded-lg shadow-lg max-w-4xl bg-theme text-theme">
+        <h2 class="text-2xl font-bold mb-4">API Documentation</h2>
+        <p class="mb-4">Use the following API endpoint to send reactions to Facebook posts:</p>
+        <pre class="bg-gray-200 p-4 rounded-md overflow-x-auto break-words">
+            <code>
+https://example.com/api/react?cookie={user cookie}&link={post link}&react={react for post}
+            </code>
+        </pre>
+
+        <h3 class="text-xl font-semibold mt-6 mb-2">Example Requests:</h3>
+
+        <div class="code-example mb-4">
+            <h4 class="font-medium">Using Python:</h4>
+            <pre class="bg-gray-200 p-4 rounded-md overflow-x-auto break-words"><button class="copy-button bg-blue-500 text-white px-2 py-1 rounded mb-2">Copy</button>
+                <code>
+import requests
+
+url = "https://example.com/api/react"
+params = {
+    'cookie': 'your_cookie_here',
+    'link': 'your_post_link_here',
+    'react': 'LIKE'  # Change to your desired reaction
+}
+
+response = requests.get(url, params=params)
+print(response.json())
+                </code>
+            </pre>
+        </div>
+
+        <div class="code-example mb-4">
+            <h4 class="font-medium">Using Node.js:</h4>
+            <pre class="bg-gray-200 p-4 rounded-md overflow-x-auto break-words"><button class="copy-button bg-blue-500 text-white px-2 py-1 rounded mb-2">Copy</button>
+                <code>
+const axios = require('axios');
+
+const url = "https://example.com/api/react";
+const params = {
+    cookie: 'your_cookie_here',
+    link: 'your_post_link_here',
+    react: 'LIKE'  // Change to your desired reaction
+};
+
+axios.get(url, { params })
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+                </code>
+            </pre>
+        </div>
+
+        <div class="code-example mb-4">
+            <h4 class="font-medium">Using TypeScript:</h4>
+
+            <pre class="bg-gray-200 p-4 rounded-md overflow-x-auto break-words"><button class="copy-button bg-blue-500 text-white px-2 py-1 rounded mb-2">Copy</button>
+                <code>
+import axios from 'axios';
+
+const url = "https://example.com/api/react";
+const params = {
+    cookie: 'your_cookie_here',
+    link: 'your_post_link_here',
+    react: 'LIKE'  // Change to your desired reaction
+};
+
+axios.get(url, { params })
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+                </code>
+            </pre>
+        </div>
+    </div>
+
+    <!-- Alert Box -->
+    <div id="alert" class="alert success">
+        <div class="alert-icon">✅</div>
+        <div id="alertMessage">Action successful!</div>
+    </div>
+
+    <script>
+        const sideMenu = document.getElementById('sideMenu');
+        const menuButton = document.getElementById('menuButton');
+        const copyButtons = document.querySelectorAll('.copy-button');
+
+        // Menu toggle
+        menuButton.addEventListener('click', () => {
+            sideMenu.classList.toggle('hidden-menu');
+            sideMenu.classList.toggle('show-menu');
+        });
+
+        // Copy functionality
+        copyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const codeBlock = button.nextElementSibling.querySelector('code').innerText;
+                navigator.clipboard.writeText(codeBlock)
+                    .then(() => {
+                        const alertBox = document.getElementById('alert');
+                        const alertMessage = document.getElementById('alertMessage');
+                        alertMessage.innerText = "Code copied to clipboard!";
+                        alertBox.classList.add('success');
+                        alertBox.style.display = "block";
+
+                        setTimeout(() => {
+                            alertBox.style.display = "none";
+                        }, 2000);
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>

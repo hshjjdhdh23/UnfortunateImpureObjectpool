@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPLIKERS - Send Reaction</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .hidden-menu {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .show-menu {
+      transform: translateX(0);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    body.light {
+      background-color: white;
+      color: black;
+    }
+
+    body.dark {
+      background-color: #1a202c;
+      color: white;
+    }
+
+    .light .bg-theme {
+      background-color: white;
+    }
+
+    .dark .bg-theme {
+      background-color: #2d3748;
+    }
+
+    .light .text-theme {
+      color: black;
+    }
+
+    .dark .text-theme {
+      color: white;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ddd;
+      width: 50px;
+      height: 30px;
+      border-radius: 50px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle-container .icon {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .icon.sun {
+      left: 5px;
+      color: yellow;
+      opacity: 1;
+    }
+
+    .icon.moon {
+      right: 5px;
+      color: white;
+      opacity: 0;
+    }
+
+    .dark .icon.sun {
+      opacity: 0;
+    }
+
+    .dark .icon.moon {
+      opacity: 1;
+    }
+
+    .toggle-container .toggle-ball {
+      position: absolute;
+      background-color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      left: 3px;
+    }
+
+    .dark .toggle-container .toggle-ball {
+      transform: translateX(20px);
+      background-color: #4a5568;
+    }
+    
+    .alert {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      z-index: 50;
+      width: 300px;
+      text-align: center;
+    }
+
+    .alert.success {
+      background-color: #c6f6d5;
+      color: #2f855a;
+    }
+
+    .alert.error {
+      background-color: #fed7d7;
+      color: #c53030;
+    }
+
+    .alert-icon {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+
+<body class="light bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+  
+  <div id="sideMenu" class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg hidden-menu pt-24 bg-theme">
+    <nav class="p-4">
+      <ul class="space-y-4 text-theme">
+        <li><a href="/" class="hover:text-blue-500">Home</a></li>
+        <li><a href="docs" class="hover:text-blue-500">Api Documents</a></li>
+         <li><a href="send_reaction" class="hover:text-blue-500">Send Reaction</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white shadow-md fixed top-0 w-full p-4 flex justify-between items-center z-40 bg-theme text-theme">
+    <div class="flex space-x-4 items-center">
+      <img src="https://i.ibb.co/sgktxyD/1727345856135.png" alt="Reaction Boost Icon" class="w-10 h-10 rounded-full">
+      <h1 class="text-3xl font-bold">RPLIKERS</h1>
+    </div>
+
+    <div id="theme-toggle" class="toggle-container">
+      <svg class="icon sun w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 1.22a1 1 0 011.42 1.42l-.7.7a1 1 0 11-1.42-1.42l.7-.7zM17 9a1 1 0 110 2h-1a1 1 0 110-2h1zM5.636 3.636a1 1 0 10-1.414 1.414l.707.707a1 1 0 101.414-1.414l-.707-.707zM3 10a1 1 0 100 2H2a1 1 0 100-2h1zm1.636 5.636a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707zm11.314 0a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM10 17a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM14 10a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
+
+      <svg class="icon moon w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd"
+          d="M17.293 13.293A8 8 0 116.707 2.707a6 6 0 1010.586 10.586z"
+          clip-rule="evenodd"></path>
+      </svg>
+
+      <div class="toggle-ball"></div>
+    </div>
+
+    <button id="menuButton" class="hover:text-blue-500 focus:outline-none">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+      </svg>
+    </button>
+  </header>
+
+  <div class="container mx-auto mt-20 p-8 bg-white rounded-lg shadow-lg max-w-md bg-theme text-theme">
+
+    <label for="cookie" class="block text-sm font-medium mb-2">Cookie:</label>
+    <input type="text" id="cookie" placeholder="Enter your cookie" required
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+
+    <label for="link" class="block text-sm font-medium mb-2">Facebook Post Link:</label>
+    <input type="text" id="link" placeholder="Enter the post link" required
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+
+    <label for="reaction" class="block text-sm font-medium mb-2">Reaction:</label>
+    <select id="reaction" required
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+      <option value="">--Select Reaction--</option>
+      <option value="LIKE">LIKE</option>
+      <option value="LOVE">LOVE</option>
+      <option value="HAHA">HAHA</option>
+      <option value="WOW">WOW</option>
+      <option value="SAD">SAD</option>
+      <option value="ANGRY">ANGRY</option>
+    </select>
+
+    <button id="sendButton" onclick="sendReaction()"
+      class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none">Send
+      Reaction</button>
+
+    <div id="response" class="mt-4 text-sm text-gray-700"></div>
+  </div>
+
+  <div id="alert" class="alert success">
+    <div class="alert-icon">✅</div>
+    <div id="alertMessage">Reaction sent successfully!</div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const sideMenu = document.getElementById('sideMenu');
+    const menuButton = document.getElementById('menuButton');
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      body.classList.toggle('light');
+    });
+    menuButton.addEventListener('click', () => {
+      sideMenu.classList.toggle('hidden-menu');
+      sideMenu.classList.toggle('show-menu');
+    });
+
+    async function sendReaction() {
+      const cookie = document.getElementById('cookie').value;
+      const link = document.getElementById('link').value;
+      const reaction = document.getElementById('reaction').value;
+
+      if (!cookie || !link || !reaction) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      const response = await fetch('/api/send_reaction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ cookie, link, reaction })
+      });
+
+      const data = await response.json();
+      document.getElementById('response').innerText = JSON.stringify(data, null, 2);
+
+      const alertBox = document.getElementById('alert');
+      alertBox.classList.remove('hidden');
+      alertBox.classList.add('success');
+      document.getElementById('alertMessage').innerText = 'Reaction sent successfully!';
+    }
+  </script>
+</body>
+
+</html>
+
+
